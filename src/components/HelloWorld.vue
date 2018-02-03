@@ -1,9 +1,18 @@
 <template>
   <div class="hello">
     <ul>
-      <li v-for="item in list" :key="item.id">
-        <single-read :item-data="item"/>
-      </li>
+      <template>
+        <h2>未读</h2>
+        <li v-for="item in list" :key="item.id" v-if="!item.status">
+          <single-read :item-data="item"/>
+        </li>
+      </template>
+      <template>
+        <h2>已读</h2>
+        <li v-for="item in list" :key="item.id" v-if="item.status">
+          <single-read :item-data="item"/>
+        </li>
+      </template>
     </ul>
   </div>
 </template>
@@ -22,7 +31,6 @@ export default {
   mounted () {
     this.getData().then(data => {
       this.list = data.data.list
-      console.log(this.list)
     })
   },
   methods: {
@@ -39,6 +47,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.hello{
+  max-width: 660px;
+  margin: 0 auto;
+}
 h1, h2 {
   font-weight: normal;
 }
@@ -47,7 +59,7 @@ ul {
   padding: 0;
 }
 li {
-  margin: 10px;
+  margin: 10px 0;
 }
 a {
   color: #42b983;

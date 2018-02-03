@@ -41,10 +41,14 @@ export default {
     height: 50px;
     width: 50px;
     overflow: hidden;
+    margin-right: 20px;
     float: left;
   }
   &-info{
     overflow: hidden;
+    .item-name{
+      margin: 0;
+    }
   }
 }
 </style>
