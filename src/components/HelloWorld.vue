@@ -1,4 +1,5 @@
 <template>
+<v-app>
   <div class="hello">
     <v-container>
       <v-layout row>
@@ -12,6 +13,7 @@
       </v-layout>
     </v-container>
   </div>
+</v-app>
 </template>
 
 <script>

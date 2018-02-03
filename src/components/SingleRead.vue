@@ -11,7 +11,7 @@
       </v-list-tile-content>
       <v-list-tile-action>
         
-        <v-menu offset-y>
+        <v-menu offset-y left>
           <v-btn icon ripple slot="activator">
             <v-icon color="grey lighten-1">more_vert</v-icon>
           </v-btn>
