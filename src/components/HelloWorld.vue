@@ -1,19 +1,11 @@
 <template>
-<v-app>
   <div class="hello">
-    <v-container>
-      <v-layout row>
-        <v-flex xs12 sm12 md12>
-          <v-card>
-            <template v-for="item in list">
-              <single-read :item-data="item" :key="item.id"/>
-            </template>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
+    <ul>
+      <li v-for="item in list" :key="item.id">
+        <single-read :item-data="item"/>
+      </li>
+    </ul>
   </div>
-</v-app>
 </template>
 
 <script>
