@@ -57,6 +57,8 @@ h1, h2 {
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
 li {
   margin: 10px 0;

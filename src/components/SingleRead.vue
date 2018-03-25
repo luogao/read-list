@@ -34,8 +34,9 @@ export default {
 </script>
 <style lang="scss">
 .block{
-  border: 1px solid #000;
   overflow: hidden;
+  background: #fff;
+  padding: 15px;
   &-img{
     border-radius: 50%;
     height: 50px;
@@ -48,6 +49,8 @@ export default {
     overflow: hidden;
     .item-name{
       margin: 0;
+      font-size: 18px;
+      font-weight: 100;
     }
   }
 }
