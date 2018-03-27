@@ -19,7 +19,7 @@
 
 <script>
 import ReadListManager from '../api/index.js'
-import SingleRead from './SingleRead'
+import SingleRead from '@/components/SingleRead'
 export default {
   name: 'HelloWorld',
   data () {
