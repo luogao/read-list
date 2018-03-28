@@ -53,6 +53,7 @@
 
 <script>
 import ReadListManager from '../api/index.js'
+import { bookmarksData } from '../api/bookmarks_data.js'
 import SingleRead from '@/components/SingleRead'
 export default {
   name: 'Home',
@@ -71,7 +72,9 @@ export default {
       }
     }
   },
-  beforeMount () {},
+  beforeMount () {
+    console.log(bookmarksData)
+  },
   methods: {
     async getData (target) {
       // const data = await ReadListManager.getLinkInfo()
