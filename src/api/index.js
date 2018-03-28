@@ -3,11 +3,14 @@ import axios from 'axios'
 class ReadListManager {
   constructor () {
     this.$http = axios.create({
-      baseURL: 'https://www.easy-mock.com/mock/5a743c2766c03869e556e214/list'
+      baseURL: 'https://www.lglzy.cn/api'
     })
   }
   getMainlist () {
     return this.$http.get('/')
+  }
+  getLinkInfo (link) {
+    return this.$http.post('/getinfo', { link })
   }
 }
 
