@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "iview": "^2.11.0",
+    "leancloud-storage": "^3.6.3",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "vue": "^2.5.2",
