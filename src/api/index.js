@@ -39,6 +39,11 @@ class ReadListManager {
     const read = AV.Object.createWithoutData('Read', id)
     return read.destroy()
   }
+  async readIsExist (link) {
+    const readQuery = new AV.Query('Read')
+    readQuery.equalTo('link', link)
+    return readQuery.first()
+  }
   async createRead (read, host) {
     const { readTags, ...readInfo } = read
     let { hostId, ...hostInfo } = host

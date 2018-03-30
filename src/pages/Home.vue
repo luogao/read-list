@@ -184,13 +184,18 @@ export default {
       })
     },
     async createRead () {
-      this.createModelLoading = true
-      await ReadListManager.createRead(this.formItem, this.hostFullInfo)
-      this.getReadData().then(data => {
-        this.list = data
-        this.$nextTick(() => { this.createModel = false })
-        this.createModelLoading = false
-      })
+      const isExist = await ReadListManager.readIsExist(this.formItem.link)
+      if (isExist) {
+        this.$Message.error('此链接已存在，请不要重复添加！')
+      } else {
+        this.createModelLoading = true
+        await ReadListManager.createRead(this.formItem, this.hostFullInfo)
+        this.getReadData().then(data => {
+          this.list = data
+          this.$nextTick(() => { this.createModel = false })
+          this.createModelLoading = false
+        })
+      }
     }
   },
   components: {
