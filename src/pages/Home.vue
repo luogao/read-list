@@ -2,14 +2,15 @@
   <div class="home">
     <ul class="readlist">
       <li v-for="item in list" :key="item.objectId" class="readlist-item">
-        <single-read :item-data="item"/>
+        <single-read :item-data="item" @edit="handleReadEdit" @delete="handleReadDelete"/>
       </li>
     </ul>
     <Button type="primary" @click="openCreateModel">添加</Button>
       <Modal
         @on-visible-change="modelVisibleChange"
         v-model="createModel"
-        title="新建">
+        title="新建"
+        :mask-closable="!createNewTagLoading">
         <Form :model="formItem" :label-width="80" ref="createForm" label-position="left" :rules="ruleValidate">
           <FormItem label="链接" prop="link">
             <i-Input v-model="formItem.link" placeholder="请输入链接">
@@ -57,6 +58,19 @@
           <Button :loading="createModelLoading" @click="createRead" type="primary">提交</Button>
         </div>
       </Modal>
+      <Modal v-model="deleteConfirmModal" width="240" :mask-closable="!deleteConfirmModalLoading">
+        <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>删除确认</span>
+        </p>
+        <div style="text-align:center">
+            <p>此操作不可逆</p>
+            <p>是否删除此项</p>
+        </div>
+        <div slot="footer">
+            <Button type="error" size="large" long :loading="deleteConfirmModalLoading" @click="confirmDelete">删除</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 
@@ -68,11 +82,14 @@ export default {
   name: 'Home',
   data () {
     return {
+      deleteConfirmModalLoading: false,
+      deleteConfirmModal: false,
       createModel: false,
       getInfoLoading: false,
       createNewTagLoading: false,
       createNewTag: false,
       createModelLoading: false,
+      curDeleteItem: '',
       list: [],
       tags: [],
       hostFullInfo: null,
@@ -100,6 +117,22 @@ export default {
     })
   },
   methods: {
+    handleReadEdit (id) {
+      console.log(id)
+    },
+    handleReadDelete (id) {
+      this.deleteConfirmModal = true
+      this.curDeleteItem = id
+    },
+    async confirmDelete () {
+      this.deleteConfirmModalLoading = true
+      await ReadListManager.readDelete(this.curDeleteItem)
+      this.getReadData().then(data => {
+        this.list = data
+        this.deleteConfirmModalLoading = false
+        this.$nextTick(() => { this.deleteConfirmModal = false })
+      })
+    },
     async getReadData () {
       const data = await ReadListManager.getReadByDefault()
       return data
@@ -153,11 +186,11 @@ export default {
     async createRead () {
       this.createModelLoading = true
       await ReadListManager.createRead(this.formItem, this.hostFullInfo)
-      this.createModelLoading = false
       this.getReadData().then(data => {
         this.list = data
+        this.$nextTick(() => { this.createModel = false })
+        this.createModelLoading = false
       })
-      this.$nextTick(() => { this.createModel = false })
     }
   },
   components: {

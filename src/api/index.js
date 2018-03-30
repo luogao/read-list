@@ -35,7 +35,10 @@ class ReadListManager {
     _category.set(_host)
     return _category.save()
   }
-
+  readDelete (id) {
+    const read = AV.Object.createWithoutData('Read', id)
+    return read.destroy()
+  }
   async createRead (read, host) {
     const { readTags, ...readInfo } = read
     let { hostId, ...hostInfo } = host
@@ -51,7 +54,6 @@ class ReadListManager {
     _read.set('_category', _category)
     return _read.save()
   }
-
   async getReadByDefault () {
     const readQuery = new AV.Query('Read')
     readQuery.include('_category')
