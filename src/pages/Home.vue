@@ -1,18 +1,9 @@
 <template>
-  <div class="hello">
-    <ul>
-      <template>
-        <h2>未读</h2>
-        <li v-for="item in list" :key="item.id" v-if="!item.status">
-          <single-read :item-data="item"/>
-        </li>
-      </template>
-      <template>
-        <h2>已读</h2>
-        <li v-for="item in list" :key="item.id" v-if="item.status">
-          <single-read :item-data="item"/>
-        </li>
-      </template>
+  <div class="home">
+    <ul class="readlist">
+      <li v-for="item in list" :key="item.objectId" class="readlist-item">
+        <single-read :item-data="item"/>
+      </li>
     </ul>
     <Button type="primary" @click="openCreateModel">添加</Button>
       <Modal
@@ -103,11 +94,15 @@ export default {
       }
     }
   },
-  beforeMount () {},
+  beforeMount () {
+    this.getReadData().then(data => {
+      this.list = data
+    })
+  },
   methods: {
-    async getData (target) {
-      // const data = await ReadListManager.getLinkInfo()
-      // this.$set(this, target, data.data.list)
+    async getReadData () {
+      const data = await ReadListManager.getReadByDefault()
+      return data
     },
     openCreateModel () {
       this.getTagsData().then(this.createModel = true)
@@ -159,6 +154,9 @@ export default {
       this.createModelLoading = true
       await ReadListManager.createRead(this.formItem, this.hostFullInfo)
       this.createModelLoading = false
+      this.getReadData().then(data => {
+        this.list = data
+      })
       this.$nextTick(() => { this.createModel = false })
     }
   },
@@ -169,21 +167,24 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.hello{
-  max-width: 660px;
+<style scoped lang="scss">
+.home{
+  max-width: 720px;
   margin: 0 auto;
+  h1, h2 {
+    font-weight: normal;
+  }
 }
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
-a {
-  color: #42b983;
-}
+.readlist {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    &-item {
+      & + .readlist-item{
+        margin-top: 10px;
+      }
+    }
+  }
+
 </style>

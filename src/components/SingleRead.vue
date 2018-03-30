@@ -1,11 +1,17 @@
 <template>
   <section class="block">
     <div class="block-img">
-      <img :src="item.img" alt="" width="50" height="50">
+      <img :src="item.host.favicon" alt="" width="50" height="50">
     </div>
     <div class="block-info">
-      <a :href="item.url"><p class="item-name">{{item.name}}</p></a>
-      <div class="item-metainfo"></div>
+      <a :href="item.link">
+        <p class="item-name">{{item.read_title}}</p>
+      </a>
+      <div class="item-metainfo">
+        <span>{{item.isRead? '已读' : '未读'}}</span>
+        <span v-if="item.isUrgent">紧急</span>
+        <Tag type="border" color="blue" v-if="item.tags.length > 0" v-for="tag in item.tags" :key="tag">{{tag}}</Tag>
+      </div>
     </div>
   </section>
 </template>
@@ -27,7 +33,7 @@ export default {
     }
   },
   mounted () {
-    console.log('hello')
+    console.log(this.item)
   },
   methods: {}
 }
@@ -38,7 +44,6 @@ export default {
   background: #fff;
   padding: 15px;
   &-img{
-    border-radius: 50%;
     height: 50px;
     width: 50px;
     overflow: hidden;

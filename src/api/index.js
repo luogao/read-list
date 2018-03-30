@@ -35,14 +35,7 @@ class ReadListManager {
     _category.set(_host)
     return _category.save()
   }
-  createReadTagMap (tags, read) {
-    return tags.map(el => {
-      const _readTagMap = new AV.Object('ReadTagMap')
-      _readTagMap.set('read', read)
-      _readTagMap.set('tag', AV.Object.createWithoutData('Tag', el))
-      return _readTagMap.save()
-    })
-  }
+
   async createRead (read, host) {
     const { readTags, ...readInfo } = read
     let { hostId, ...hostInfo } = host
@@ -54,12 +47,38 @@ class ReadListManager {
     }
     const _category = AV.Object.createWithoutData('Category', hostId)
     _read.set(readInfo)
+    _read.set('tags', readTags)
     _read.set('_category', _category)
-    const newRead = await _read.save()
-    if (readTags.length > 0) {
-      await this.createReadTagMap(readTags, newRead)
+    return _read.save()
+  }
+
+  async getReadByDefault () {
+    const readQuery = new AV.Query('Read')
+    readQuery.include('_category')
+    readQuery.include('tags')
+    const results = await readQuery.find()
+    let formatResult = []
+    for (let el of results) {
+      const tagP = el.get('tags').map(_tag => {
+        const tagQuery = new AV.Query('Tag')
+        return tagQuery.get(_tag).then(el => el.get('name'))
+      })
+      const formatTags = await Promise.all(tagP)
+      let obj = {
+        read_title: el.get('read_title'),
+        link: el.get('link'),
+        isRead: el.get('isRead'),
+        isUrgent: el.get('isUrgent'),
+        objectId: el.get('objectId'),
+        tags: formatTags,
+        host: {
+          name: el.get('_category').get('display_name'),
+          favicon: el.get('_category').get('favicon')
+        }
+      }
+      formatResult.push(obj)
     }
-    return newRead
+    return formatResult
   }
 }
 

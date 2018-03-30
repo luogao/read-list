@@ -3,10 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import './assets/css/index.scss'
 import AV from 'leancloud-storage'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
+import './assets/css/index.scss'
+
 const appId = 'Luwn37983MFGl7WXp5Pc5GfR-gzGzoHsz'
 const appKey = 'SnC2PpwJR5qJu1HQedf0m8QC'
 AV.init({ appId, appKey })
